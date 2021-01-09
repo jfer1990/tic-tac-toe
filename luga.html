@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8"/>
+  <script src="modal.js"></script>
+  <script src="figures.js"></script>
+  <link rel="stylesheet" href="modalStyle.css">
+  <style>
+        body{
+            background-color: black;
+        }
+        .float-parent {
+            border: none;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .float-child {
+            border: none;
+        } 
+        #user{
+            color: white;
+        }
+  </style>
+ </head>
+ <body>
+
+    <div class="float-child" id="user">
+        <form action=""></form>
+        <table>
+            <tr>
+                <td><label for="player1">Nombre Jugador 1</label></td>
+                <td><label for="player2">Nombre Jugador 2</label></td>
+            </tr>
+            <tr>
+                <td><input id="player1" type="text" value="JUGADOR1" oninput="populateTurn()"></td>
+            
+                <td><input id="player2" type="text" value="JUGADOR2"></td>
+            </tr>
+        </table>
+        <p id="turnos">Turno del jugador</p>
+    </div>
+
+    <div class="float-parent">
+        
+    
+        <div class="float-child">
+            <canvas id="canvas" width="500" height="500"></canvas>
+        </div>
+    </div>
+   <script>
+        const game = new TicTacToeGame();
+        var player1 = document.getElementById('player1').value
+        var player2 = document.getElementById('player2').value
+        game.setPlayersNames(player1,player2);
+        game.drawScenario();
+        game.playerTurn()
+       
+        canvas = document.querySelector("canvas");
+        canvas.addEventListener('mouseup', function (event) {
+            player1 = document.getElementById('player1').value
+            player2 = document.getElementById('player2').value
+            game.setPlayersNames(player1,player2);
+            //game.setPlayersNames(player1,player2);
+            var canvasMousePosition = game.mousePosition(event);
+            game.addPlayerMove(canvasMousePosition);
+            });
+        function populateTurn() {
+            var x = document.getElementById("player1").value;
+            document.getElementById("turnos").innerHTML = "Turno de "+ x;
+        }
+        
+    </script>
+ </body>
+</html>
