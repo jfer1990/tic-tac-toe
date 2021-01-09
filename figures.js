@@ -34,6 +34,9 @@ class Figures{
 
   
     }
+
+    //@return object with 2 fields, coords and matrixPos
+    //{coords:[double,double],matrixPos:[int,int]}
     positionInTicTacGrid (mouse) {
         var xCordinate;
         var yCordinate;
@@ -212,7 +215,7 @@ class TicTacToeGame{
     moveTracer = [];
     playerOne = {current:true,charVal:"O",name:"jugador1"};
     playerTwo = {current:false,charVal:"X",name:"jugador2"}; 
-    dicPositions = {};
+    positionsMap = new Map();
 
     drawScenario(){
         this.figure.drawTicTacToeGrid();
@@ -229,6 +232,7 @@ class TicTacToeGame{
       
 
       var clickPosition = this.figure.positionInTicTacGrid(mousePosition);
+
       var drawingPos = clickPosition.coords;
       var matrixPos = clickPosition.matrixPos;
       try{
@@ -243,28 +247,21 @@ class TicTacToeGame{
             playAudio();
           }
           this.moveTracer.push({drawPos:drawingPos,matrixPos:matrixPos});
-          this.dicPositions[matrixPos] = drawingPos;
+
           
         }
         var isWinner = this.ticLogic.isWinner(matrixPos[0],matrixPos[1],currentPlayer.charVal);
         if(isWinner.winStat){
           var winnerTracePosition = isWinner.winnerTraceCoord;
-          var initialCoord = winnerTracePosition[0];
-          var lastCoord = winnerTracePosition[2];
-          var firstDrawCoord = this.dicPositions[initialCoord.x,initialCoord.y];
-          var lastDrawCoord = this.dicPositions[lastCoord.x,lastCoord.y];
-          showModal(currentPlayer.name+" es el ganador");
-          //window.alert(currentPlayer.name+" es el ganador");
-          //window.location.reload(); 
-          
 
-          /*this.figure.drawLine(firstDrawCoord[0],firstDrawCoord[1],
-                                lastDrawCoord[0],lastDrawCoord[1]);
-                                */
+          showModal(currentPlayer.name+" es el ganador");
+          
           
         }
-        if(this.ticLogic.isFull()){
-          showModal("No hay ganador");
+        else{
+          if(this.ticLogic.isFull()){
+            showModal("No hay ganador");
+          }
         }
         //this.playerTurn(nextPlayer);
         this.playerOne.current = !this.playerOne.current;
@@ -320,6 +317,8 @@ var sounds = [
 ];
 function playAudio() { 
   var sound = sounds[Math.floor(Math.random() * sounds.length)];
+  sound.pause();
+  sound.currentTime = 0.36;
   sound.play();
 } 
 
